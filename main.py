@@ -453,7 +453,7 @@ def now_ir() -> datetime:
 
 def generate_share_link(uuid: str, host: str, remark: str = "RVG", protocol: str = DEFAULT_PROTOCOL) -> str:
     link = LINKS.get(uuid) or {}
-    alpn = link.get("alpn", "h2")
+    alpn = link.get("alpn", "http/1.1")
     fp = link.get("fingerprint", "chrome")
 
     if protocol == "mtproto":
@@ -491,6 +491,7 @@ def generate_share_link(uuid: str, host: str, remark: str = "RVG", protocol: str
         return f"trojan://{uuid}@{host}:443?{query}#{quote(remark)}"
 
     if protocol == "vless-ws":
+        alpn = "http/1.1"
         path = f"/ws/{uuid}"
         params = {
             "encryption": "none",
@@ -1290,7 +1291,7 @@ async def _create_link_core(body: dict) -> dict:
     if protocol not in PROTOCOLS:
         protocol = DEFAULT_PROTOCOL
 
-    alpn_val = str(body.get("alpn") or "h2,http/1.1").strip()[:60]
+    alpn_val = str(body.get("alpn") or "http/1.1").strip()[:60]
     fp_val = str(body.get("fingerprint") or "chrome").strip()[:20]
     if fp_val not in ("chrome", "firefox", "ios"):
         fp_val = "chrome"
