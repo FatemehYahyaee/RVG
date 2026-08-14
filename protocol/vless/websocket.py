@@ -33,6 +33,7 @@ from protocol.vless.vless import (
 
 async def websocket_tunnel(ws: WebSocket, uuid: str):
     await ws.accept()
+    logger.info(f"🔌 WS CONNECT uuid={uuid[:8]}… ip={_ws_client_ip(ws)}")
 
     async with LINKS_LOCK:
         link = LINKS.get(uuid)
@@ -51,6 +52,7 @@ async def websocket_tunnel(ws: WebSocket, uuid: str):
         "connected_at": datetime.now(timezone.utc).isoformat(),
         "bytes": 0,
     }
+    logger.info(f"✅ WS AUTHORIZED uuid={uuid[:8]}… conn={conn_id}")
     logger.info(f"✅ WS [{conn_id}] uuid={uuid[:8]}… ip={ip} total={len(connections)}")
     log_activity("connection", f"اتصال جدید از {ip} (کانفیگ {link.get('label','?')})", "info")
     writer = None
