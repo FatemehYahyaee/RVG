@@ -104,7 +104,7 @@ def _get_or_create_secret() -> str:
 CONFIG = {
     "port": int(os.environ.get("PORT", 8000)),
     "secret": _get_or_create_secret(),
-    "host": os.environ.get("RAILWAY_PUBLIC_DOMAIN", "localhost"),
+    "host": os.environ.get("RENDER_EXTERNAL_HOSTNAME",os.environ.get("RAILWAY_PUBLIC_DOMAIN", "localhost")),
 }
 
 
@@ -442,7 +442,7 @@ async def shutdown():
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 def get_host() -> str:
-    return os.environ.get("RAILWAY_PUBLIC_DOMAIN", CONFIG["host"])
+    return os.environ.get("RENDER_EXTERNAL_HOSTNAME",os.environ.get("RAILWAY_PUBLIC_DOMAIN", CONFIG["host"]))
 
 def generate_uuid() -> str:
     h = secrets.token_hex(16)
