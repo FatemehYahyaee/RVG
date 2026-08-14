@@ -58,6 +58,9 @@ logger = logging.getLogger("RVG-Gateway")
 IRAN_TZ = ZoneInfo("Asia/Tehran")
 
 app = FastAPI(title="RVG Gateway - codebox", docs_url=None, redoc_url=None)
+@app.get("/health")
+async def health():
+    return {"status": "ok"}
 
 # وقتی مستقیم با `python main.py` اجرا میشه، این ماژول با نام "__main__" ثبت
 # میشه نه "main". چون protocol/vless/vless.py و protocol/trojan/trojan.py با
