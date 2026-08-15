@@ -1,0 +1,19 @@
+name: Sync to Hugging Face Hub
+
+on:
+  push:
+    branches: [main] # اگر نام برنچ اصلی شما master است، این را به master تغییر دهید
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Push to hub
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: git push --force https://Fatemehyahyaee67:$HF_TOKEN@huggingface.co/spaces/Fatemehyahyaee67/Fatemehyahyaee67/my_RVG main
