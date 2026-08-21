@@ -43,8 +43,6 @@ jobs:
           new_load = '''async def load_state():
     global LINKS, AUTH, SUBS
     try:
-        # Prefer durable Upstash state. If the key is missing/unavailable,
-        # fall back to the existing local file and migrate it to Redis when possible.
         remote_data = await storage.load_state()
         data = remote_data
         if data is None:
@@ -89,8 +87,6 @@ jobs:
             "saved_at": datetime.now().isoformat(),
         }
 
-        # Durable backend first. Keep the local write as a fallback/cache so
-        # the existing file-based behavior remains useful outside Render.
         remote_ok = await storage.save_state(data)
         try:
             DATA_DIR.mkdir(parents=True, exist_ok=True)
@@ -118,3 +114,5 @@ jobs:
           git diff --cached --quiet && exit 0
           git commit -m "Integrate Upstash persistence and Render hostname"
           git push
+
+# Triggered intentionally after the initial workflow file was added.
